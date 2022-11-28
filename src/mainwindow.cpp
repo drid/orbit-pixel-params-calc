@@ -17,9 +17,9 @@ MainWindow::MainWindow(QWidget *parent) :
     angMeas = "deg";
     orbitPixParamsObj = NULL;
 
-    ui->hLineEdit->setText("550");
-    ui->fovLineEdit->setText("18");
-    ui->angLineEdit->setText("15");
+    ui->hLineEdit->setText("525");
+    ui->fovLineEdit->setText("60");
+    ui->angLineEdit->setText("0");
     ui->rLineEdit->setText("6371");
     ui->pxLineEdit->setText("640");
 
@@ -149,6 +149,21 @@ void MainWindow::on_calcPushButton_clicked()
         angVec = orbitPixParamsObj->getAngVec();
         losVec = orbitPixParamsObj->getLosVec();
         pixVec = orbitPixParamsObj->getPixVec();
+
+        // Fill label values
+        ui->lbSwathVal->setText(QString::number(orbitPixParamsObj->getSwathSize()));
+        if (viewAng == 0)
+        {
+            ui->lbSwathOverlapUnits->setText(angMeas);
+            if (angMeas == "rad")
+                ui->lbOverlapVal->setText(QString::number(orbitPixParamsObj->getSwathOverlapAngle(), 'f', 5));
+            else if (angMeas == "deg")
+                ui->lbOverlapVal->setText(QString::number(convToDeg(orbitPixParamsObj->getSwathOverlapAngle()), 'f', 2));
+            else if (angMeas == "grad")
+                ui->lbOverlapVal->setText(QString::number(convToGrad(orbitPixParamsObj->getSwathOverlapAngle()), 'f', 2));
+        } else {
+            ui->lbOverlapVal->setText("-");
+        }
 
         // Prepare the table
         ui->tableWidget->setRowCount(px);

@@ -20,6 +20,14 @@ public:
 
     void pixSizeCalc();
 
+    float swathCalc();
+
+    float getSwathSize();
+
+    float swathOverlapCalc();
+
+    float getSwathOverlapAngle();
+
     void setH(double h);
 
     void setFov(double fov);

@@ -1,6 +1,11 @@
 #include "orbitpixparams.h"
 #define PI 3.141592653589793
 
+/* TODO:
+ * AoV = 2 * arctan ( h / 2f ) h=frame dimension, f is focal length
+ * Swath Width
+ */
+
 //-----------------------------------------------------------------------------
 // CONSTRUCTORS:
 //-----------------------------------------------------------------------------
@@ -163,6 +168,21 @@ void OrbitPixParams::pixSizeCalc()
     }
 }
 
+float OrbitPixParams::swathCalc()
+{
+    double chord, theta;
+    chord = cosLaw(strtLineLenCalc(viewAng+fov/2), strtLineLenCalc(viewAng-fov/2), fov);
+    theta = 2 * asin(chord / (2 * r));
+    return r * theta;
+}
+
+float OrbitPixParams::swathOverlapCalc()
+{
+    double chord, sep_angle;
+    chord = cosLaw(strtLineLenCalc(fov/2), strtLineLenCalc(fov/2), fov);
+    sep_angle = 2 * atan(chord/2/r);
+    return sep_angle;
+}
 //-----------------------------------------------------------------------------
 // SETTERS:
 //-----------------------------------------------------------------------------
@@ -255,7 +275,15 @@ vector<double> OrbitPixParams::getAngVec()
     return angVec;
 }
 
+float OrbitPixParams::getSwathSize()
+{
+    return swathCalc();
+}
 
+float OrbitPixParams::getSwathOverlapAngle()
+{
+    return swathOverlapCalc();
+}
 //-----------------------------------------------------------------------------
 // PRINT TO FILE:
 //-----------------------------------------------------------------------------
